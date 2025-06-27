@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    environment:
+      DATABASE: "mongodb://mongoadmin:secret@mongodb:27017/idurar?authSource=admin"
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - mongodb
+    ports:
+      - "10000:10000"
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+      - "8888:8888"
+    depends_on:
+      - backend
+
+  mongodb:
+    image: mongo:6
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongoadmin
+      MONGO_INITDB_ROOT_PASSWORD: secret
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - "27017:27017"
+
+volumes:
+  mongodb_data:
