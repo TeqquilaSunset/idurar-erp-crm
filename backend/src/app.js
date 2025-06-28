@@ -15,6 +15,9 @@ const errorHandlers = require('./handlers/errorHandlers');
 const erpApiRouter = require('./routes/appRoutes/appApi');
 
 const fileUpload = require('express-fileupload');
+
+const { metricsHandler } = require('./utils/metrics');
+
 // create our Express app
 const app = express();
 
@@ -32,7 +35,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(compression());
 
 // // default options
-// app.use(fileUpload());
 
 // Here our API Routes
 
@@ -41,6 +43,9 @@ app.use('/api', adminAuth.isValidAuthToken, coreApiRouter);
 app.use('/api', adminAuth.isValidAuthToken, erpApiRouter);
 app.use('/download', coreDownloadRouter);
 app.use('/public', corePublicRouter);
+
+app.get('/metrics', metricsHandler);
+
 
 // If that above routes didnt work, we 404 them and forward to error handler
 app.use(errorHandlers.notFound);

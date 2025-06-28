@@ -9,6 +9,10 @@ const controllerDirectories = globSync(pattern).map((filePath) => {
   return path.basename(filePath);
 });
 
+const invoiceController = {
+  mail: require('./invoiceController/sendMail'), // Убедитесь, что это указывает на ваш новый sendMail.js
+};
+
 const appControllers = () => {
   const controllers = {};
   const hasCustomControllers = [];
